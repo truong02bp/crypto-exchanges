@@ -1,3 +1,4 @@
+import 'package:crypto_exchanges/screens/coin_detail/components/chart.dart';
 import 'package:crypto_exchanges/screens/coin_detail/components/exchange.dart';
 import 'package:crypto_exchanges/screens/coin_detail/components/information.dart';
 import 'package:crypto_exchanges/screens/coin_detail/components/detail_appbar.dart';
@@ -26,8 +27,11 @@ class _CoinDetailState extends State<CoinDetail> {
           child: Column(
             children: [
               DetailAppBar(),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Information(),
+              Chart(),
               Exchange(),
             ],
           ),
