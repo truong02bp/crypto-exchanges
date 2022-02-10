@@ -7,13 +7,14 @@ class ThemeProvider with ChangeNotifier {
   ThemeProvider({required this.isLightTheme});
 
   ThemeData themeData() {
+    Color black = Color(0xFF201c1c);
     return ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
       primarySwatch: isLightTheme ? Colors.grey : Colors.grey,
-      primaryColor: isLightTheme ? Colors.white : Color(0xFF26242e),
+      primaryColor: isLightTheme ? Colors.white : black,
       brightness: isLightTheme ? Brightness.light : Brightness.dark,
-      backgroundColor: isLightTheme ? Color(0xFFFFFFFF) : Colors.black,
-      scaffoldBackgroundColor: isLightTheme ? Color(0xFFFFFFFF) : Color(0xFF26242e),
+      backgroundColor: isLightTheme ? Color(0xFFFFFFFF) : black,
+      scaffoldBackgroundColor: isLightTheme ? Color(0xFFFFFFFF) : black,
     );
   }
 

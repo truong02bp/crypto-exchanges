@@ -16,19 +16,40 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1,
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 18.0, left: 12.0, top: 24, bottom: 12),
-              child: LineChart(
-                mainData(),
+    return Column(
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              TextButton(onPressed: () {}, child: Text('line')),
+              TextButton(onPressed: () {}, child: Text('1m')),
+              TextButton(onPressed: () {}, child: Text('5m')),
+              TextButton(onPressed: () {}, child: Text('15m')),
+              TextButton(onPressed: () {}, child: Text('1h')),
+              TextButton(onPressed: () {}, child: Text('2h')),
+              TextButton(onPressed: () {}, child: Text('4h')),
+              TextButton(onPressed: () {}, child: Text('6h')),
+              TextButton(onPressed: () {}, child: Text('12h')),
+              TextButton(onPressed: () {}, child: Text('1d')),
+            ],
+          ),
+        ),
+        Stack(
+          children: <Widget>[
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      right: 0, left: 12.0, top: 0, bottom: 12),
+                  child: LineChart(
+                    mainData(),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ],
     );
@@ -41,28 +62,7 @@ class _ChartState extends State<Chart> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: SideTitles(
-          showTitles: true,
-          interval: 1,
-          getTextStyles: (context, value) => const TextStyle(
-            color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 1:
-                return '100';
-              case 3:
-                return '300';
-              case 5:
-                return '500';
-            }
-            return '';
-          },
-          reservedSize: 30,
-          margin: 0,
-        ),
+        rightTitles: SideTitles(showTitles: false),
         topTitles: SideTitles(showTitles: false),
         bottomTitles: SideTitles(
           showTitles: true,

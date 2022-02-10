@@ -31,7 +31,6 @@ dependencies:
   flutter_native_splash: ^1.2.3
   fl_chart: ^0.41.0
   flutter_bloc: ^8.0.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
