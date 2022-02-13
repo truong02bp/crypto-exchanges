@@ -194,7 +194,6 @@ class Chart extends StatelessWidget {
                                           child: Text(
                                             candles[index >= 0 ? index : 0]
                                                 .close
-                                                .round()
                                                 .toString(),
                                             style: TextStyle(
                                               color: ColorPalette.grayColor,
@@ -212,14 +211,6 @@ class Chart extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.symmetric(
-                                            vertical: BorderSide(
-                                              color: ColorPalette.grayColor,
-                                              width: 1,
-                                            ),
-                                          ),
-                                        ),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 20),
@@ -247,14 +238,6 @@ class Chart extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.symmetric(
-                                        vertical: BorderSide(
-                                          color: ColorPalette.grayColor,
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: VolumeWidget(
@@ -298,36 +281,6 @@ class Chart extends StatelessWidget {
                             height: 20,
                           ),
                         ],
-                      ),
-                      Positioned(
-                        top: hoverY - 10,
-                        child: Row(
-                          children: [
-                            Container(
-                              color: ColorPalette.digalogColor,
-                              child: Center(
-                                child: Text(
-                                  hoverY < maxHeight * 0.75
-                                      ? (high -
-                                      (hoverY - 20) /
-                                          (maxHeight * 0.75 - 40) *
-                                          (high - low))
-                                      .toStringAsFixed(0)
-                                      : priceToString(getRoof(volumeHigh) *
-                                      (1 -
-                                          (hoverY - maxHeight * 0.75 - 10) /
-                                              (maxHeight * 0.25 - 10))),
-                                  style: TextStyle(
-                                    color: ColorPalette.grayColor,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                              width: 50,
-                              height: 20,
-                            ),
-                          ],
-                        ),
                       ),
                       Positioned(
                         child: Column(

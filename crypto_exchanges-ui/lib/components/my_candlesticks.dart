@@ -87,18 +87,6 @@ class _MyCandlesticksState extends State<MyCandlesticks> {
                 CustomButton(
                   onPressed: () {
                     setState(() {
-                      candleWidth -= 2;
-                      candleWidth = max(candleWidth, 2);
-                    });
-                  },
-                  child: Icon(
-                    Icons.remove,
-                    color: ColorPalette.grayColor,
-                  ),
-                ),
-                CustomButton(
-                  onPressed: () {
-                    setState(() {
                       candleWidth += 2;
                       candleWidth = min(candleWidth, 10);
                     });
@@ -109,6 +97,38 @@ class _MyCandlesticksState extends State<MyCandlesticks> {
                   ),
                 ),
                 CustomButton(
+                  onPressed: () {
+                    setState(() {
+                      candleWidth -= 2;
+                      candleWidth = max(candleWidth, 2);
+                    });
+                  },
+                  child: Icon(
+                    Icons.remove,
+                    color: ColorPalette.grayColor,
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      widget.onIntervalChange('15m');
+                    },
+                    child: Text('15m')),
+                TextButton(
+                    onPressed: () {
+                      widget.onIntervalChange('1h');
+                    },
+                    child: Text('1h')),
+                TextButton(
+                    onPressed: () {
+                      widget.onIntervalChange('4h');
+                    },
+                    child: Text('4h')),
+                TextButton(
+                    onPressed: () {
+                      widget.onIntervalChange('1d');
+                    },
+                    child: Text('1d')),
+                TextButton(
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -121,23 +141,23 @@ class _MyCandlesticksState extends State<MyCandlesticks> {
                               children: (widget.intervals ?? intervals)
                                   .map(
                                     (e) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CustomButton(
-                                    width: 50,
-                                    color: ColorPalette.lightGold,
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                        color: ColorPalette.gold,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CustomButton(
+                                        width: 50,
+                                        color: ColorPalette.lightGold,
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                            color: ColorPalette.gold,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          widget.onIntervalChange(e);
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
                                     ),
-                                    onPressed: () {
-                                      widget.onIntervalChange(e);
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ),
-                              )
+                                  )
                                   .toList(),
                             ),
                           ),
@@ -146,7 +166,7 @@ class _MyCandlesticksState extends State<MyCandlesticks> {
                     );
                   },
                   child: Text(
-                    widget.interval,
+                    'more',
                     style: TextStyle(
                       color: ColorPalette.grayColor,
                     ),

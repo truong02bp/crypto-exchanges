@@ -20,7 +20,7 @@ class _ChartState extends State<Chart> {
   WebSocketChannel? _channel;
 
   void binanceFetch(String interval) {
-    fetchCandles(symbol: "XRPUSDT", interval: interval).then(
+    fetchCandles(symbol: "BNBUSDT", interval: interval).then(
           (value) => setState(
             () {
           interval = interval;
@@ -36,7 +36,7 @@ class _ChartState extends State<Chart> {
       jsonEncode(
         {
           "method": "SUBSCRIBE",
-          "params": ["xrpusdt@kline_" + interval],
+          "params": ["bnbusdt@kline_" + interval],
           "id": 1
         },
       ),
@@ -46,6 +46,7 @@ class _ChartState extends State<Chart> {
   void updateCandlesFromSnapshot(AsyncSnapshot<Object?> snapshot) {
     if (snapshot.data != null) {
       final data = jsonDecode(snapshot.data as String) as Map<String, dynamic>;
+      print(data);
       if (data.containsKey("k") == true &&
           candles[0].date.millisecondsSinceEpoch == data["k"]["t"]) {
         candles[0] = Candle(
@@ -75,52 +76,32 @@ class _ChartState extends State<Chart> {
   @override
   void initState() {
     // TODO: implement initState
-    print('aaa');
     super.initState();
-    binanceFetch("1m");
+    binanceFetch("15m");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              TextButton(onPressed: () {}, child: Text('5m')),
-              TextButton(onPressed: () {}, child: Text('15m')),
-              TextButton(onPressed: () {}, child: Text('1h')),
-              TextButton(onPressed: () {}, child: Text('2h')),
-              TextButton(onPressed: () {}, child: Text('4h')),
-              TextButton(onPressed: () {}, child: Text('6h')),
-              TextButton(onPressed: () {}, child: Text('12h')),
-              TextButton(onPressed: () {}, child: Text('1d')),
-            ],
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          height: 400,
-          child: Padding(
-            padding: const EdgeInsets.only(
-                right: 0, left: 0, top: 0, bottom: 12),
-            child: StreamBuilder(
-              stream: _channel == null ? null : _channel!.stream,
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                updateCandlesFromSnapshot(snapshot);
-                return MyCandlesticks(
-                  onIntervalChange: (String value) async {
-                    binanceFetch(value);
-                  },
-                  candles: candles,
-                  interval: interval,
-                );
+    return Container(
+      width: double.infinity,
+      height: 400,
+      child: Padding(
+        padding: const EdgeInsets.only(
+            right: 0, left: 0, top: 0, bottom: 12),
+        child: StreamBuilder(
+          stream: _channel == null ? null : _channel!.stream,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            updateCandlesFromSnapshot(snapshot);
+            return MyCandlesticks(
+              onIntervalChange: (String value) async {
+                binanceFetch(value);
               },
-            ),
-          ),
+              candles: candles,
+              interval: interval,
+            );
+          },
         ),
-      ],
+      ),
     );
   }
 
