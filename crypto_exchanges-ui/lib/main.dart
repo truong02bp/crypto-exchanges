@@ -1,6 +1,6 @@
 import 'package:crypto_exchanges/routes.dart';
 import 'package:crypto_exchanges/screens/main_page.dart';
-import 'package:crypto_exchanges/theme_provider.dart';
+import 'package:crypto_exchanges/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 
 void main() {

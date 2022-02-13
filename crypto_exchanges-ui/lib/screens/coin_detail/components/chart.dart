@@ -1,5 +1,10 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'dart:convert';
+
+import 'package:crypto_exchanges/components/my_candlesticks.dart';
+import 'package:crypto_exchanges/model/candle.dart';
+import 'package:crypto_exchanges/repository.dart';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Chart extends StatefulWidget {
   const Chart({Key? key}) : super(key: key);
@@ -9,10 +14,71 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
-  List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
+
+  List<Candle> candles = [];
+  String interval = "1m";
+  WebSocketChannel? _channel;
+
+  void binanceFetch(String interval) {
+    fetchCandles(symbol: "XRPUSDT", interval: interval).then(
+          (value) => setState(
+            () {
+          interval = interval;
+          candles = value;
+        },
+      ),
+    );
+    if (_channel != null) _channel!.sink.close();
+    _channel = WebSocketChannel.connect(
+      Uri.parse('wss://stream.binance.com:9443/ws'),
+    );
+    _channel!.sink.add(
+      jsonEncode(
+        {
+          "method": "SUBSCRIBE",
+          "params": ["xrpusdt@kline_" + interval],
+          "id": 1
+        },
+      ),
+    );
+  }
+
+  void updateCandlesFromSnapshot(AsyncSnapshot<Object?> snapshot) {
+    if (snapshot.data != null) {
+      final data = jsonDecode(snapshot.data as String) as Map<String, dynamic>;
+      if (data.containsKey("k") == true &&
+          candles[0].date.millisecondsSinceEpoch == data["k"]["t"]) {
+        candles[0] = Candle(
+            date: candles[0].date,
+            high: double.parse(data["k"]["h"]),
+            low: double.parse(data["k"]["l"]),
+            open: double.parse(data["k"]["o"]),
+            close: double.parse(data["k"]["c"]),
+            volume: double.parse(data["k"]["v"]));
+      } else if (data.containsKey("k") == true &&
+          data["k"]["t"] - candles[0].date.millisecondsSinceEpoch ==
+              candles[0].date.millisecondsSinceEpoch -
+                  candles[1].date.millisecondsSinceEpoch) {
+        candles.insert(
+            0,
+            Candle(
+                date: DateTime.fromMillisecondsSinceEpoch(data["k"]["t"]),
+                high: double.parse(data["k"]["h"]),
+                low: double.parse(data["k"]["l"]),
+                open: double.parse(data["k"]["o"]),
+                close: double.parse(data["k"]["c"]),
+                volume: double.parse(data["k"]["v"])));
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    print('aaa');
+    super.initState();
+    binanceFetch("1m");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +88,6 @@ class _ChartState extends State<Chart> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              TextButton(onPressed: () {}, child: Text('line')),
-              TextButton(onPressed: () {}, child: Text('1m')),
               TextButton(onPressed: () {}, child: Text('5m')),
               TextButton(onPressed: () {}, child: Text('15m')),
               TextButton(onPressed: () {}, child: Text('1h')),
@@ -35,90 +99,29 @@ class _ChartState extends State<Chart> {
             ],
           ),
         ),
-        Stack(
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 1,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 0, left: 12.0, top: 0, bottom: 12),
-                  child: LineChart(
-                    mainData(),
-                  ),
-                ),
-              ),
+        Container(
+          width: double.infinity,
+          height: 400,
+          child: Padding(
+            padding: const EdgeInsets.only(
+                right: 0, left: 0, top: 0, bottom: 12),
+            child: StreamBuilder(
+              stream: _channel == null ? null : _channel!.stream,
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                updateCandlesFromSnapshot(snapshot);
+                return MyCandlesticks(
+                  onIntervalChange: (String value) async {
+                    binanceFetch(value);
+                  },
+                  candles: candles,
+                  interval: interval,
+                );
+              },
             ),
-          ],
+          ),
         ),
       ],
     );
   }
 
-  LineChartData mainData() {
-    return LineChartData(
-      gridData: FlGridData(
-        show: false,
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 1,
-          interval: 1,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 10),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 2:
-                return 'MAR';
-              case 5:
-                return 'JUN';
-              case 8:
-                return 'SEP';
-            }
-            return '';
-          },
-          margin: 2,
-        ),
-        leftTitles: SideTitles(showTitles: false),
-      ),
-      borderData: FlBorderData(
-          show: false,
-          border: Border.all(color: const Color(0xff37434d), width: 0.8)),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-          ],
-          isCurved: true,
-          colors: gradientColors,
-          barWidth: 2,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            colors:
-                gradientColors.map((color) => color.withOpacity(0.3)).toList(),
-          ),
-        ),
-      ],
-    );
-  }
 }

@@ -43,7 +43,6 @@ class DetailAppBar extends StatelessWidget {
               return state is FavoriteState;
             },
             builder: (context, state) {
-              print("rebuild");
               bool isFavorite = bloc.getIsFavorite();
               return InkWell(
                 child: isFavorite

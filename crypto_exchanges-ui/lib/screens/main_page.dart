@@ -20,6 +20,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color color = Color(0xFF201c1c);
     return Scaffold(
       body: !isLogin ? Login() : SafeArea(child: screens[currentIndex]),
       bottomNavigationBar: isLogin
@@ -27,6 +28,7 @@ class _MainPageState extends State<MainPage> {
               showUnselectedLabels: true,
               selectedItemColor: Colors.yellow.withOpacity(0.75),
               unselectedIconTheme: IconThemeData(color: Colors.grey),
+              unselectedLabelStyle: TextStyle(color: Colors.white),
               currentIndex: currentIndex,
               onTap: (index) {
                 if (index != currentIndex) {
@@ -39,23 +41,23 @@ class _MainPageState extends State<MainPage> {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',
-                    backgroundColor: Color(0xFF26242e)),
+                    backgroundColor: color, ),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.bar_chart),
                     label: 'Markets',
-                    backgroundColor: Color(0xFF26242e)),
+                    backgroundColor: color),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.monetization_on),
                     label: 'Trades',
-                    backgroundColor: Color(0xFF26242e)),
+                    backgroundColor: color),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.event),
                     label: 'Futures',
-                    backgroundColor: Color(0xFF26242e)),
+                    backgroundColor: color),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.account_balance_wallet_rounded),
                     label: 'Wallet',
-                    backgroundColor: Color(0xFF26242e)),
+                    backgroundColor: color),
               ],
             )
           : Container(),
