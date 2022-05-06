@@ -15,54 +15,66 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Header(),
-        SizedBox(
-          height: 15,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: MyCard(
-                  title: 'P2P Trading',
-                  text:
-                      'Bank Transfer, Digital Wallet\nTransfer, Mobile Payment and',
-                  icon: 'assets/images/trade.png',
-                  onTap: () {}),
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Expanded(
-                child: MyCard(
-                    title: 'Credit/Debit Card',
-                    text: 'Visa, Mastercard',
-                    icon: 'assets/images/credit.png',
-                    onTap: () {}))
-          ],
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        Expanded(
-            child: Container(
-          padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-          decoration: BoxDecoration(
-            color: AppColor.black3,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+    return Padding(
+      padding: const EdgeInsets.only(left: 2, right: 2),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 15,
           ),
-          child: Column(
+          Header(),
+          const SizedBox(
+            height: 30,
+          ),
+          Row(
             children: [
-              CoinFavorite(),
-              SizedBox(height: 10,),
-              Container(width: double.infinity, height: 0.2, color: Colors.grey.withOpacity(0.5),),
-              Expanded(child: DashBoard()),
+              Expanded(
+                child: MyCard(
+                    title: 'P2P Trading',
+                    text:
+                        'Bank Transfer, Digital Wallet\nTransfer, Mobile Payment and',
+                    icon: 'assets/images/trade.png',
+                    onTap: () {}),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                  child: MyCard(
+                      title: 'Credit/Debit Card',
+                      text: 'Visa, Mastercard',
+                      icon: 'assets/images/credit.png',
+                      onTap: () {}))
             ],
           ),
-        )),
-      ],
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+            decoration: BoxDecoration(
+              color: AppColor.black3,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+            ),
+            child: Column(
+              children: [
+                CoinFavorite(),
+                const SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 0.2,
+                  color: Colors.grey.withOpacity(0.5),
+                ),
+                Expanded(child: DashBoard()),
+              ],
+            ),
+          )),
+        ],
+      ),
     );
   }
 }

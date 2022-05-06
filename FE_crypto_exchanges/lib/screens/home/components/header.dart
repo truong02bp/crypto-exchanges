@@ -53,8 +53,8 @@ class _HeaderState extends State<Header> {
           GestureDetector(
             onTap: () {},
             child: Container(
-                height: 25,
-                width: 25,
+                height: 20,
+                width: 20,
                 decoration:
                 BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Image.asset(
@@ -66,14 +66,11 @@ class _HeaderState extends State<Header> {
           GestureDetector(
             onTap: () {},
             child: Container(
-                height: 25,
-                width: 25,
+                height: 20,
+                width: 20,
                 decoration:
                 BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(
-                  "assets/images/bell.png",
-                  fit: BoxFit.fill,
-                )),
+                child: Icon(Icons.notifications)),
           ),
           SizedBox(width: 10,),
         ],
