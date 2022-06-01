@@ -17,7 +17,13 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   bool isLogin = true;
   int currentIndex = 0;
-  final screens = [Home(), Market(), Trade(), Future(), Wallet()];
+  final screens = [
+    Home(),
+    Market(),
+    Trade(),
+    Future(),
+    Wallet()
+  ];
 
   @override
   Widget build(BuildContext context) {
